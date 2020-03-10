@@ -29,6 +29,68 @@ class LinkedList {
     }
   }
 
+  insertBefore(nextNode, item) {
+    if (this.head === null) {
+      this.insertFirst(item);
+    } else {
+      let currNode = this.head;
+      let prevNode = this.head;
+
+      while (currNode !== null && currNode.value !== nextNode) {
+        prevNode = currNode;
+        currNode = currNode.next;
+      }
+
+      prevNode.next = new _Node(item, currNode);
+    }
+  }
+
+  insertAfter(pNode, item) {
+    if (this.head === null) {
+      this.insertFirst(item);
+    } else {
+      let currNode = this.head;
+      let prevNode = this.head;
+
+      while (currNode !== null && currNode.value !== pNode) {
+        prevNode = currNode;
+        currNode = currNode.next;
+      }
+
+      prevNode = currNode;
+      currNode = currNode.next;
+      prevNode.next = new _Node(item, currNode);
+    }
+  }
+
+  insertAt(index, item) {
+    if (this.head === null) {
+      this.insertFirst(item);
+    }
+
+    let currNode = this.head;
+    let prevNode = this.head;
+    let i = 0;
+
+    while (i !== index) {
+      if (!currNode.next) {
+        return;
+      }
+
+      prevNode = currNode;
+      currNode = currNode.next;
+      i++;
+    }
+
+    if (currNode === null) {
+      return;
+    }
+
+    let pushedItem = prevNode;
+    let newItem = new _Node(item, prevNode.next);
+    pushedItem.next = newItem;
+  }
+
   find(item) {
     let currNode = this.head;
 
@@ -53,7 +115,7 @@ class LinkedList {
 
     if (this.head.value === item) {
       this.head = this.head.next;
-      return; // makes the next node the head - is the OG head removed? I get lost from here down
+      return;
     }
 
     let currNode = this.head;
@@ -70,5 +132,85 @@ class LinkedList {
     }
 
     previousNode.next = currNode.next;
+  }
+}
+
+function main() {
+  const SLL = new LinkedList();
+  // isEmpty(SLL);
+  SLL.insertFirst("Apollo");
+  SLL.insertFirst("Boomer");
+  SLL.insertFirst("Helo");
+  SLL.insertFirst("Husker");
+  SLL.insertFirst("Starbuck");
+  SLL.insertFirst("Tauhida");
+  SLL.remove("Husker");
+  SLL.remove("Tauhida");
+  SLL.insertBefore("Boomer", "Michael");
+  SLL.insertAfter("Boomer", "Mace");
+  SLL.insertAt(0, "Kobe");
+  display(SLL);
+  // isEmpty(SLL);
+  size(SLL);
+  findPrevious(SLL, "Boomer");
+  findLast(SLL);
+}
+
+main();
+
+//Supplemental functions
+
+function display(list) {
+  let dis = [];
+  let current = list.head;
+  while (current !== null) {
+    dis = [...dis, current.value];
+    current = current.next;
+  }
+
+  console.log(dis);
+}
+
+function size(list) {
+  let number = 0;
+  let current = list.head;
+  while (current !== null) {
+    number++;
+    current = current.next;
+  }
+  console.log("The size of the list: " + number);
+}
+
+function isEmpty(list) {
+  if (!list.head) {
+    console.log("This list is empty");
+    return;
+  }
+  display(list);
+}
+
+function findPrevious(list, item) {
+  let current = list.head;
+  let prev = list.head;
+
+  while (current !== null) {
+    if (current.value === item) {
+      console.log(`The item previous to ${item} is: ` + prev.value);
+    }
+
+    prev = current;
+    current = current.next;
+  }
+}
+
+function findLast(list) {
+  let current = list.head;
+
+  while (current !== null) {
+    if (current.next === null) {
+      console.log("The last item value is: " + current.value);
+      return;
+    }
+    current = current.next;
   }
 }
